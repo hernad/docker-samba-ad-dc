@@ -35,8 +35,10 @@ appSetup () {
     # Provision Samba
     rm -f /etc/samba/smb.conf
     rm -rf /var/lib/samba/private/*
+    echo "samba options:$SAMBA_OPTIONS:"
     samba-tool domain provision --use-rfc2307 --domain=$SAMBA_DOMAIN --realm=$SAMBA_REALM --server-role=dc\
-      --dns-backend=BIND9_DLZ --adminpass=$SAMBA_ADMIN_PASSWORD $SAMBA_HOST_IP_PARAM
+      --dns-backend=BIND9_DLZ --adminpass=$SAMBA_ADMIN_PASSWORD $SAMBA_HOST_IP_PARAM $SAMBA_OPTIONS \
+      --option="bind interfaces only"=yes
 
 }
 
