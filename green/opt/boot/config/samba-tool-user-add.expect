@@ -1,0 +1,8 @@
+set user [lindex $argv 0]
+set password [lindex $argv 1]
+
+spawn samba-tool user add $user
+expect "New Password:" { send "$password\n" }
+expect "Retype Password:" { send "$password\n" }
+ 
+interact		
