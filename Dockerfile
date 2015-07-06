@@ -39,7 +39,9 @@ RUN apt-get install -y sssd sssd-tools
 ADD sssd.conf /etc/sssd/sssd.conf
 RUN chmod 0600 /etc/sssd/sssd.conf
 
-ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+ADD supervisord.conf.ad /
+ADD supervisord.conf.member / 
+# init.sh ce prebaciti u /etc/supervisor/conf.d/supervisord.conf
 ADD init.sh /init.sh
 RUN chmod 755 /init.sh
 
@@ -62,4 +64,4 @@ EXPOSE 5353/udp
 
 
 ENTRYPOINT ["/init.sh"]
-CMD ["app:start"]
+CMD ["app:help"]

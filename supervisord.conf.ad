@@ -1,9 +1,6 @@
 [supervisord]
 nodaemon=true
 
-[program:sshd]
-command=netstat -tlnp | grep  0.0.0.0:22  || /usr/sbin/sshd -D
-
 [program:bind9]
 command=/usr/sbin/named -c /etc/bind/named.conf -u bind -f
 
