@@ -112,9 +112,12 @@ fi
 
 fi
 
+[ ! -f /var/lib/samba/private ] && mkdir /var/lib/samba/private
+
 cp /supervisord.conf.member /etc/supervisor/conf.d/supervisord.conf                                        
 
 # Start the services                                                                             
+
 /usr/bin/supervisord
 
 

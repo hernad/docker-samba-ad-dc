@@ -1,11 +1,14 @@
 [supervisord]
 nodaemon=true
 
-[program:samba]
-command=/usr/sbin/samba -i
+[program:nbmd]
+command=/usr/sbin/nbmd -i
 
-[program:sssd]
-command=/usr/sbin/sssd -i
+[program:sbmd]
+command=/usr/sbin/sbmd -i
 
-[program:syslog]
-command=/usr/sbin/rsyslogd -n
+#[program:sssd]
+#command=/usr/sbin/sssd -i
+
+#[program:syslog]
+#command=/usr/sbin/rsyslogd -n
