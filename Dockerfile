@@ -1,4 +1,4 @@
-FROM ubuntu:vivid
+FROM ubuntu:trusty
 MAINTAINER Ernad Husremovic <hernad@bring.out.ba> 
 # Thank you: Martin Yrj√∂l√<martin.yrjola@gmail.com> & Tobias Kaatz <info@kaatz.io>
 

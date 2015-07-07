@@ -18,7 +18,7 @@ kerberosInit () {
     expect kdb5_util_create.expect                                                                         
     # Export kerberos keytab for use with sssd                                                             
     samba-tool domain exportkeytab /etc/krb5.keytab #hernad: ne trebamo ovo --principal ${HOSTNAME}\$      
-    sed -i "s/SAMBA_REALM/${SAMBA_REALM}/" /etc/sssd/sssd.conf                                       
+    sed -i "s/SAMBA_REALM/${KERBEROS_REALM}/" /etc/sssd/sssd.conf                                       
                                                                                                      
 }
 
@@ -74,43 +74,30 @@ cat > $FILE <<- EOM
 [global]
 
   netbios name = $SAMBA_NETBIOS
-  workgroup = $SAMBA_DOMAIN
+  workgroup = $KERBEROS_DOMAIN
   security = ADS
   realm = $KERBEROS_REALM
   dedicated keytab file = /etc/krb5.keytab
   kerberos method = secrets and keytab
+  password server = $SAMBA_REALM
 
-  idmap config *:backend = tdb
-  #idmap config *:range = 2000-9999
-  idmap idmap config * : range = 16777216-33554431
-  idmap config $SAMBA_DOMAIN:backend = ad
-  idmap config $SAMBA_DOMAIN:schema_mode = rfc2307
-  #idmap config $SAMBA_DOMAIN:range = 10000-99999
+  idmap config * : backend = tdb
+  idmap idmap config * : range = 2000-9999
+  idmap idmap config * : schema_mode = rfc2307
+
+  idmap config $KERBEROS_DOMAIN:backend = ad
+  idmap config $KERBEROS_DOMAIN:schema_mode = rfc2307
+  idmap config $KERBEROS_DOMAIN:range = 10000-49999
 
   winbind nss info = rfc2307
   winbind trusted domains only = no
   winbind use default domain = yes
-  winbind offline logon = false
   winbind enum users  = yes
   winbind enum groups = yes
   winbind refresh tickets = Yes
 
-  password server = $SAMBA_REALM
   template homedir = /home/%U
   template shell = /bin/bash
-
-  idmap config *:backend = tdb
-  #idmap config *:range = 2000-9999
-  idmap config BRING:backend = ads
-  idmap config BRING:schema_mode = rfc2307
-  #idmap config BRING:range = 10000-99999
-
-  winbind nss info = rfc2307
-  winbind trusted domains only = no
-  winbind use default domain = yes
-  winbind enum users  = yes
-  winbind enum groups = yes
-  winbind refresh tickets = Yes
 
 EOM
 
