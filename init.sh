@@ -129,7 +129,9 @@ cat >> $FILE <<- EOM
 
 EOM
 
-chown "administrator":"domain users" /$SAMBA_SHARE
+expect net_join.expect $KERBEROS_PASSWORD
+
+chown "administrator":"domain users" /$SAMBA_SHARE || echo nakon sto se podesi domena pokrenuti chown \"administrator\":\"domain users\" /$SAMBA_SHARE 
 
 fi
 

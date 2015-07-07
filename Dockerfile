@@ -64,6 +64,7 @@ EXPOSE 5353
 EXPOSE 5353/udp
 
 ADD nsswitch.conf /etc/nsswitch.conf
+ADD net_join.expect /
 
 ENTRYPOINT ["/init.sh"]
 CMD ["app:help"]

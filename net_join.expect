@@ -1,0 +1,6 @@
+set password [lindex $argv 0]
+
+spawn net ads join -U Administrator
+expect "Password:" { send "$password\n" }
+ 
+interact		
