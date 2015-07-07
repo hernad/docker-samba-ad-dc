@@ -10,8 +10,8 @@ command=/usr/sbin/krb5kdc -n
 [program:samba]
 command=/usr/sbin/samba -i
 
-#[program:sssd]
-#command=/usr/sbin/sssd -i
+[program:sssd]
+command=/usr/sbin/sssd -i
 
-#[program:syslog]
-#command=/usr/sbin/rsyslogd -n
+[program:syslog]
+command=/usr/sbin/rsyslogd -n

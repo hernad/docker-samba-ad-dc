@@ -1,6 +1,12 @@
 set password [lindex $argv 0]
 
+spawn kinit Administrator
+expect "Password:" { send "$password\n" }
+
 spawn net ads join -U Administrator
 expect "Password:" { send "$password\n" }
- 
+
+spawn net ads keytab create -k 
+
+spawn net ads info
 interact		

@@ -10,3 +10,5 @@ command=/etc/init.d/winbind start
 [program:sbmd]
 command=/etc/init.d/smbd start
 
+[program:sssd]
+command=/usr/sbin/sssd -D

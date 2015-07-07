@@ -11,7 +11,6 @@ fi
 
 kerberosInit () {                                                                                          
     
-                                                                                                      
     ln -sf /var/lib/samba/private/krb5.conf /etc/krb5.conf                                                 
 
     # Create Kerberos database                                                                             
@@ -38,7 +37,7 @@ appSetup () {
     rm -f /etc/samba/smb.conf
     rm -rf /var/lib/samba/private/*
     echo "samba options:$SAMBA_OPTIONS:"
-    samba-tool domain provision --use-rfc2307 --domain=$SAMBA_DOMAIN --realm=$SAMBA_REALM --server-role=dc\
+    samba-tool domain provision --use-rfc2307 --domain=$SAMBA_DOMAIN --realm=$KERBEROS_REALM --server-role=dc\
       --dns-backend=BIND9_DLZ --adminpass=$SAMBA_ADMIN_PASSWORD $SAMBA_HOST_IP_PARAM $SAMBA_OPTIONS \
       --option="bind interfaces only"=yes
 
@@ -65,8 +64,10 @@ appHelp () {
 
 appMemberSmb () {
 
-FILE=/etc/samba/smb.conf
 
+sed -i "s/SAMBA_REALM/${KERBEROS_REALM}/" /etc/sssd/sssd.conf                                       
+
+FILE=/etc/samba/smb.conf
 if [ ! -f /etc/samba/.alreadysetup ]
 then
 
