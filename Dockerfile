@@ -16,7 +16,7 @@ RUN mkdir -p /var/run/sshd
 RUN mkdir -p /var/log/supervisor
 RUN sed -ri 's/PermitRootLogin without-password/PermitRootLogin Yes/g' /etc/ssh/sshd_config
 
-RUN apt-get install -y krb5-user krb5-kdc bind9 dnsutils
+RUN apt-get install -y krb5-user krb5-kdc bind9 psmisc dnsutils
 ADD named.conf.options /etc/bind/named.conf.options
 
 RUN apt-get install -y  attr acl python-dnspython python-xattr
