@@ -2,13 +2,11 @@
 nodaemon=true
 
 [program:nbmd]
-command=/usr/sbin/nbmd -i
+command=/etc/init.d/nmbd start
+
+[program:winbind]
+command=/etc/init.d/winbind start
 
 [program:sbmd]
-command=/usr/sbin/sbmd -i
+command=/etc/init.d/smbd start
 
-#[program:sssd]
-#command=/usr/sbin/sssd -i
-
-#[program:syslog]
-#command=/usr/sbin/rsyslogd -n

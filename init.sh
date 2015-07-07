@@ -10,8 +10,10 @@ if [[ $SAMBA_HOST_IP ]]; then
 fi
 
 kerberosInit () {                                                                                          
-                                                                                                           
+    
+                                                                                                      
     ln -sf /var/lib/samba/private/krb5.conf /etc/krb5.conf                                                 
+
     # Create Kerberos database                                                                             
     expect kdb5_util_create.expect                                                                         
     # Export kerberos keytab for use with sssd                                                             
@@ -65,24 +67,43 @@ appMemberSmb () {
 
 FILE=/etc/samba/smb.conf
 
-if [ ! -f $FILE ]
+if [ ! -f /etc/samba/.alreadysetup ]
 then
 
 cat > $FILE <<- EOM
 [global]
 
-  netbios name = $SAMBA_HOST
+  netbios name = $SAMBA_NETBIOS
   workgroup = $SAMBA_DOMAIN
   security = ADS
-  realm = $SAMBA_REALM
+  realm = $KERBEROS_REALM
   dedicated keytab file = /etc/krb5.keytab
   kerberos method = secrets and keytab
 
   idmap config *:backend = tdb
-  idmap config *:range = 2000-9999
+  #idmap config *:range = 2000-9999
+  idmap idmap config * : range = 16777216-33554431
   idmap config $SAMBA_DOMAIN:backend = ad
   idmap config $SAMBA_DOMAIN:schema_mode = rfc2307
-  idmap config $SAMBA_DOMAIN:range = 10000-99999
+  #idmap config $SAMBA_DOMAIN:range = 10000-99999
+
+  winbind nss info = rfc2307
+  winbind trusted domains only = no
+  winbind use default domain = yes
+  winbind offline logon = false
+  winbind enum users  = yes
+  winbind enum groups = yes
+  winbind refresh tickets = Yes
+
+  password server = $SAMBA_REALM
+  template homedir = /home/%U
+  template shell = /bin/bash
+
+  idmap config *:backend = tdb
+  #idmap config *:range = 2000-9999
+  idmap config BRING:backend = ads
+  idmap config BRING:schema_mode = rfc2307
+  #idmap config BRING:range = 10000-99999
 
   winbind nss info = rfc2307
   winbind trusted domains only = no
@@ -108,11 +129,26 @@ cat >> $FILE <<- EOM
 
 EOM
 
-fi
+chown "administrator":"domain users" /$SAMBA_SHARE
 
 fi
 
-[ ! -f /var/lib/samba/private ] && mkdir /var/lib/samba/private
+touch /etc/samba/.alreadysetup
+
+fi
+
+KRB_FILE=/etc/krb5.conf
+
+[ -f $KRB_FILE ] && rm $KRB_FILE
+
+cat > $KRB_FILE <<- EOM
+[libdefaults]
+	default_realm = $KERBEROS_REALM
+	dns_lookup_realm = false
+	dns_lookup_kdc = true
+EOM
+
+[ ! -d /var/lib/samba/private ] && mkdir /var/lib/samba/private
 
 cp /supervisord.conf.member /etc/supervisor/conf.d/supervisord.conf                                        
 

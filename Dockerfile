@@ -1,4 +1,4 @@
-FROM ubuntu:trusty
+FROM ubuntu:vivid
 MAINTAINER Ernad Husremovic <hernad@bring.out.ba> 
 # Thank you: Martin Yrj√∂l√<martin.yrjola@gmail.com> & Tobias Kaatz <info@kaatz.io>
 
@@ -7,6 +7,7 @@ ENV DEBIAN_FRONTEND noninteractive
 VOLUME ["/var/lib/samba", "/etc/samba"]
 
 # Setup ssh and install supervisord
+RUN sed -e 's/archive./ba.archive./' /etc/apt/sources.list -i
 RUN apt-get update
 RUN apt-get upgrade -y
 
@@ -62,6 +63,7 @@ EXPOSE 1024-5000
 EXPOSE 5353
 EXPOSE 5353/udp
 
+ADD nsswitch.conf /etc/nsswitch.conf
 
 ENTRYPOINT ["/init.sh"]
 CMD ["app:help"]
