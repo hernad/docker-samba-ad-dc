@@ -117,11 +117,8 @@ cat >> $FILE <<- EOM
 
 EOM
 
-expect net_join.expect $KERBEROS_PASSWORD
 
-id Administrator | grep -q domain || echo --- net ads join ERROR ---- ?! 
 
-chown "administrator":"domain users" /$SAMBA_SHARE || echo nakon sto se podesi domena pokrenuti chown \"administrator\":\"domain users\" /$SAMBA_SHARE 
 
 fi
 
@@ -141,6 +138,10 @@ cat > $KRB_FILE <<- EOM
 EOM
 
 [ ! -d /var/lib/samba/private ] && mkdir /var/lib/samba/private
+
+expect net_join.expect $KERBEROS_PASSWORD
+id Administrator | grep -q domain || echo --- net ads join ERROR ---- ?! 
+chown "administrator":"domain users" /$SAMBA_SHARE || echo nakon sto se podesi domena pokrenuti chown \"administrator\":\"domain users\" /$SAMBA_SHARE 
 
 cp /supervisord.conf.member /etc/supervisor/conf.d/supervisord.conf                                        
 
