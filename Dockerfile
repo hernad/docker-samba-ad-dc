@@ -11,8 +11,8 @@ RUN sed -e 's/archive./ba.archive./' /etc/apt/sources.list -i
 RUN apt-get update
 RUN apt-get upgrade -y
 
-RUN apt-get install -y openssh-server supervisor
-RUN mkdir -p /var/run/sshd
+RUN apt-get install -y ntp supervisor
+#RUN mkdir -p /var/run/sshd
 RUN mkdir -p /var/log/supervisor
 RUN sed -ri 's/PermitRootLogin without-password/PermitRootLogin Yes/g' /etc/ssh/sshd_config
 
@@ -45,6 +45,8 @@ ADD supervisord.conf.member /
 # init.sh ce prebaciti u /etc/supervisor/conf.d/supervisord.conf
 ADD init.sh /init.sh
 RUN chmod 755 /init.sh
+
+ADD ntp.conf /etc/ntp.conf
 
 # https://wiki.samba.org/index.php/Samba_port_usage
 

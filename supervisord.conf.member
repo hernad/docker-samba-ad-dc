@@ -9,3 +9,6 @@ command=/etc/init.d/smbd start
 
 [program:sssd]
 command=/usr/sbin/sssd -i
+
+[program:ntpd]
+command=/usr/sbin/ntpd -p /var/run/ntpd.pid -g -u 104:109

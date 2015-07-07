@@ -43,7 +43,7 @@ appSetup () {
 
 }
 
-appStart () {
+appDomainStart () {
     [ -f /etc/samba/.alreadysetup ] && echo "Skipping setup..." || appSetup
 
     kerberosInit
@@ -149,9 +149,16 @@ cp /supervisord.conf.member /etc/supervisor/conf.d/supervisord.conf
 
 }
 
+init() {
+
+sed -ri 's/999999/$SAMBA_HOST_IP/g' /etc/ntp.conf
+
+}
+
+
 case "$1" in
 	app:start)
-		appStart
+		appDomainStart
 		;;
 	app:setup)
 		appSetup

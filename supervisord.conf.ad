@@ -15,3 +15,7 @@ command=/usr/sbin/sssd -i
 
 [program:syslog]
 command=/usr/sbin/rsyslogd -n
+
+[program:ntpd]
+command=/usr/sbin/ntpd -p /var/run/ntpd.pid -g -u 104:109
+
