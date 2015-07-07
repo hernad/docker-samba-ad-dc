@@ -151,10 +151,14 @@ cp /supervisord.conf.member /etc/supervisor/conf.d/supervisord.conf
 
 init() {
 
-sed -ri 's/999999/$SAMBA_HOST_IP/g' /etc/ntp.conf
+echo listen on given interface $SAMBA_HOST_IP
+sed -ri "s/999999/$SAMBA_HOST_IP/g" /etc/ntp.conf
+sed -ri "s/999999/$SAMBA_HOST_IP/g" /etc/bind/named.conf.options
 
 }
 
+
+init
 
 case "$1" in
 	app:start)
