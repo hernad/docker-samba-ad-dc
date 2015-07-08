@@ -1,8 +1,11 @@
-set password [lindex $argv 0]
+set domain_controller [lindex $argv 0]
+set password [lindex $argv 1]
 
 spawn net ads join -U Administrator
 expect -r "Enter Administrator.*:" { send "$password\n" ; spawn echo joinam se .. }
-sleep 5
+sleep 7
 
+spawn net rpc rights grant 'BRING\Domain Admins' SeDiskOperatorPrivilege -U'BRING\administrator' -I $domain_controller
+expect -r "Password for [.*\Administrator]:" { send "$password\n" }
 spawn net ads info
-interact		
+interact

@@ -44,8 +44,10 @@ appSetup () {
 }
 
 appDomainStart () {
+
     [ -f /etc/samba/.alreadysetup ] && echo "Skipping setup..." || appSetup
 
+    cp /nsswitch.conf.ad /etc/nsswitch.conf
     kerberosInit
 
     cp /supervisord.conf.ad /etc/supervisor/conf.d/supervisord.conf
@@ -80,15 +82,14 @@ cat > $FILE <<- EOM
   realm = $KERBEROS_REALM
   dedicated keytab file = /etc/krb5.keytab
   kerberos method = secrets and keytab
-  password server = $SAMBA_REALM
 
   idmap config * : backend = tdb
-  idmap idmap config * : range = 2000-9999
+  idmap idmap config * : range = 20000-99999
   idmap idmap config * : schema_mode = rfc2307
 
   idmap config $KERBEROS_DOMAIN:backend = ad
   idmap config $KERBEROS_DOMAIN:schema_mode = rfc2307
-  idmap config $KERBEROS_DOMAIN:range = 10000-49999
+  idmap config $KERBEROS_DOMAIN:range = 100000-499999
 
   winbind nss info = rfc2307
   winbind trusted domains only = no
@@ -100,12 +101,16 @@ cat > $FILE <<- EOM
   template homedir = /home/%U
   template shell = /bin/bash
 
+  include = /etc/samba/shares.conf 
+
 EOM
 
 
+FILE_SHARES=/etc/samba/shares.conf
+
 if [ ! -z $SAMBA_SHARE ] ; then
 
-cat >> $FILE <<- EOM
+cat > $FILE_SHARES <<- EOM
 [$SAMBA_SHARE]
   path = /$SAMBA_SHARE
   read only = no
@@ -137,9 +142,11 @@ cat > $KRB_FILE <<- EOM
 	dns_lookup_kdc = true
 EOM
 
+cp /nsswitch.conf.member /etc/nsswitch.conf
+
 [ ! -d /var/lib/samba/private ] && mkdir /var/lib/samba/private
 
-expect net_join.expect $KERBEROS_PASSWORD
+expect net_join.expect $SAMBA_REALM $KERBEROS_PASSWORD
 id Administrator | grep -q domain || echo --- net ads join ERROR ---- ?! 
 chown "administrator":"domain users" /$SAMBA_SHARE || echo nakon sto se podesi domena pokrenuti chown \"administrator\":\"domain users\" /$SAMBA_SHARE 
 

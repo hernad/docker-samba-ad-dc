@@ -65,7 +65,22 @@ EXPOSE 1024-5000
 EXPOSE 5353
 EXPOSE 5353/udp
 
-ADD nsswitch.conf /etc/nsswitch.conf
+ADD nsswitch.conf.ad /
+
+RUN echo https://lists.samba.org/archive/samba/2014-January/178286.html
+RUN echo Winbindd does the authentication against AD and retreival of the
+RUN user and group infos from a AD domain the windows way, and
+RUN tries to map the infos as closely and windows-like as possible,
+RUN in particular with information about nested groups, etc.
+
+RUN sssd on the other hand side, I don't know well enough. But
+RUN as far as I am aware, sssd coming from the FreeIPA/LDAP world
+RUN uses ldap and direct kerberos auth where possible intead of
+RUN windows native methods which leads to certain tradeoffs. Some
+RUN info is simply not accessible that way, or presented incorrectly.
+
+ADD nsswitch.conf.member /
+
 ADD net_join.expect /
 
 ENTRYPOINT ["/init.sh"]

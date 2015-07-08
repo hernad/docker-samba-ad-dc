@@ -7,8 +7,8 @@ command=/etc/init.d/nmbd start
 [program:sbmd]
 command=/etc/init.d/smbd start
 
-[program:sssd]
-command=/usr/sbin/sssd -i
+[program:winbind]
+command=/etc/init.d/winbind start
 
 [program:ntpd]
 command=/usr/sbin/ntpd -p /var/run/ntpd.pid -g -u 104:109
