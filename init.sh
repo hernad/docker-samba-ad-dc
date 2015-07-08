@@ -100,8 +100,11 @@ cat > $FILE <<- EOM
 
   template homedir = /home/%U
   template shell = /bin/bash
-
   include = /etc/samba/shares.conf 
+
+  vfs objects = acl_xattr
+  map acl inherit = Yes
+  store dos attributes = Yes
 
 EOM
 
@@ -112,17 +115,20 @@ if [ ! -z $SAMBA_SHARE ] ; then
 
 cat > $FILE_SHARES <<- EOM
 [$SAMBA_SHARE]
+  comment = member share $SAMBA_SHARE
   path = /$SAMBA_SHARE
+  browseable = Yes
   read only = no
   force group = "Domain Users"
+  create mask = 0660
   directory mask = 0770
   force directory mode = 0770
-  create mask = 0660
-  force create mode = 0660
-
+  #vfs objects = acl_xattr full_audit
+  #acl_xattr:ignore system acls = yes
+  #full_audit:success = connect opendir disconnect unlink mkdir rmdir open rename
+  #full_audit:failure = connect opendir disconnect unlink mkdir rmdir open rename
+                    
 EOM
-
-
 
 
 fi

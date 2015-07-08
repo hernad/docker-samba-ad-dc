@@ -21,7 +21,7 @@ ADD named.conf.options /etc/bind/named.conf.options
 
 RUN apt-get install -y  attr acl python-dnspython python-xattr
 
-RUN apt-get install -y samba smbclient winbind
+RUN apt-get install -y samba smbclient winbind ldb-tools
 
 # Install utilities needed for setup
 RUN apt-get install -y expect pwgen
@@ -69,15 +69,21 @@ ADD nsswitch.conf.ad /
 
 RUN echo https://lists.samba.org/archive/samba/2014-January/178286.html
 RUN echo Winbindd does the authentication against AD and retreival of the
-RUN user and group infos from a AD domain the windows way, and
-RUN tries to map the infos as closely and windows-like as possible,
-RUN in particular with information about nested groups, etc.
+RUN echo user and group infos from a AD domain the windows way, and
+RUN echo tries to map the infos as closely and windows-like as possible,
+RUN echo in particular with information about nested groups, etc.
 
-RUN sssd on the other hand side, I don't know well enough. But
-RUN as far as I am aware, sssd coming from the FreeIPA/LDAP world
-RUN uses ldap and direct kerberos auth where possible intead of
-RUN windows native methods which leads to certain tradeoffs. Some
-RUN info is simply not accessible that way, or presented incorrectly.
+RUN echo "sssd on the other hand side, I don't know well enough. But"
+RUN echo "as far as I am aware, sssd coming from the FreeIPA/LDAP world"
+RUN echo "uses ldap and direct kerberos auth where possible intead of"
+RUN echo "windows native methods which leads to certain tradeoffs. Some"
+RUN echo "info is simply not accessible that way, or presented incorrectly."
+
+
+
+RUN echo https://lists.samba.org/archive/samba/2014-January/178307.html
+RUN echo "Running Samba's smbd as a domain member server without winbindd is a"
+RUN echo "very bad idea.  It forces Samba into a number of undesirable fallback modes"
 
 ADD nsswitch.conf.member /
 
