@@ -17,5 +17,4 @@ command=/usr/sbin/sssd -i
 command=/usr/sbin/rsyslogd -n
 
 [program:ntpd]
-command=/usr/sbin/ntpd -p /var/run/ntpd.pid -g -u 104:109
-
+command=/etc/init.d/ntp start

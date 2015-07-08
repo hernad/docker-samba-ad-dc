@@ -11,4 +11,4 @@ command=/etc/init.d/smbd start
 command=/etc/init.d/winbind start
 
 [program:ntpd]
-command=/usr/sbin/ntpd -p /var/run/ntpd.pid -g -u 104:109
+command=/etc/init.d/ntp start
