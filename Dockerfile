@@ -79,8 +79,6 @@ RUN echo "uses ldap and direct kerberos auth where possible intead of"
 RUN echo "windows native methods which leads to certain tradeoffs. Some"
 RUN echo "info is simply not accessible that way, or presented incorrectly."
 
-
-
 RUN echo https://lists.samba.org/archive/samba/2014-January/178307.html
 RUN echo "Running Samba's smbd as a domain member server without winbindd is a"
 RUN echo "very bad idea.  It forces Samba into a number of undesirable fallback modes"
