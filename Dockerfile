@@ -67,21 +67,21 @@ EXPOSE 5353/udp
 
 ADD nsswitch.conf.ad /
 
-RUN echo https://lists.samba.org/archive/samba/2014-January/178286.html
-RUN echo Winbindd does the authentication against AD and retreival of the
-RUN echo user and group infos from a AD domain the windows way, and
-RUN echo tries to map the infos as closely and windows-like as possible,
-RUN echo in particular with information about nested groups, etc.
+# https://lists.samba.org/archive/samba/2014-January/178286.html
+# Winbindd does the authentication against AD and retreival of the
+# user and group infos from a AD domain the windows way, and
+# tries to map the infos as closely and windows-like as possible,
+# in particular with information about nested groups, etc.
 
-RUN echo "sssd on the other hand side, I don't know well enough. But"
-RUN echo "as far as I am aware, sssd coming from the FreeIPA/LDAP world"
-RUN echo "uses ldap and direct kerberos auth where possible intead of"
-RUN echo "windows native methods which leads to certain tradeoffs. Some"
-RUN echo "info is simply not accessible that way, or presented incorrectly."
+# "sssd on the other hand side, I don't know well enough. But"
+# "as far as I am aware, sssd coming from the FreeIPA/LDAP world"
+# "uses ldap and direct kerberos auth where possible intead of"
+# "windows native methods which leads to certain tradeoffs. Some"
+# "info is simply not accessible that way, or presented incorrectly."
 
-RUN echo https://lists.samba.org/archive/samba/2014-January/178307.html
-RUN echo "Running Samba's smbd as a domain member server without winbindd is a"
-RUN echo "very bad idea.  It forces Samba into a number of undesirable fallback modes"
+# https://lists.samba.org/archive/samba/2014-January/178307.html
+# "Running Samba's smbd as a domain member server without winbindd is a"
+# "very bad idea.  It forces Samba into a number of undesirable fallback modes"
 
 ADD nsswitch.conf.member /
 
