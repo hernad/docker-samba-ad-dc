@@ -107,20 +107,13 @@ EOM
 
 FILE_SHARES=/etc/samba/shares.conf
 
-
-
-for x in $arr
-do
-    echo "> [$x]"
-done
-
 if [ ! -z $SAMBA_SHARES ] ; then
 
-shares=$(echo $IN | tr "," "\n")
+shares=$(echo $SAMBA_SHARES | tr "," "\n")
 
 for share in $shares
 do 
-cat > $FILE_SHARES <<- EOM
+cat >> $FILE_SHARES <<- EOM
 [$share]
   comment = member share $share
   path = /$share
