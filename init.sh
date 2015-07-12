@@ -111,6 +111,7 @@ if [ ! -z $SAMBA_SHARES ] ; then
 
 shares=$(echo $SAMBA_SHARES | tr "," "\n")
 
+rm $FILE_SHARES
 for share in $shares
 do 
 cat >> $FILE_SHARES <<- EOM
