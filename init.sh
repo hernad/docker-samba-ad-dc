@@ -85,13 +85,6 @@ cat > $FILE <<- EOM
   template homedir = /home/%U
   template shell = /bin/bash
         
-  client signing = yes
-  client use spnego = yes
-
-  ntlm auth = no
-  lanman auth = no
-  client ntlmv2 auth = yes
-
   idmap config $KERBEROS_DOMAIN:backend = ad
   idmap config $KERBEROS_DOMAIN:schema_mode = rfc2307
   idmap config $KERBEROS_DOMAIN:range = 5000-50000
@@ -116,7 +109,8 @@ if [ ! -z $SAMBA_SHARES ] ; then
 
 shares=$(echo $SAMBA_SHARES | tr "," "\n")
 
-rm $FILE_SHARES
+[ ! $SAMBA_SHARES ] && rm $FILE_SHARES
+
 for share in $shares
 do 
 cat >> $FILE_SHARES <<- EOM
@@ -150,8 +144,10 @@ cp /nsswitch.conf.member /etc/nsswitch.conf
 [ ! -d /var/lib/samba/private ] && mkdir /var/lib/samba/private
 
 expect net_join.expect $SAMBA_REALM $KERBEROS_PASSWORD
+sleep 5
 id Administrator | grep -q domain || echo --- net ads join ERROR ---- ?! 
-chown "administrator":"domain users" /$SAMBA_SHARE || echo nakon sto se podesi domena pokrenuti chown \"administrator\":\"domain users\" /$SAMBA_SHARE 
+chown "administrator" /$SAMBA_SHARE 
+chgrp "domain users" /$SAMBA_SHARE 
 
 cp /supervisord.conf.member /etc/supervisor/conf.d/supervisord.conf                                        
 

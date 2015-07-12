@@ -10,5 +10,5 @@ command=/etc/init.d/smbd start
 [program:winbind]
 command=/etc/init.d/winbind start
 
-[program:ntpd]
+[program:ntp]
 command=/etc/init.d/ntp start
