@@ -78,29 +78,34 @@ cat > $FILE <<- EOM
 
   netbios name = $SAMBA_NETBIOS
   workgroup = $KERBEROS_DOMAIN
-  security = ADS
   realm = $KERBEROS_REALM
+  security = ADS
   dedicated keytab file = /etc/krb5.keytab
   kerberos method = secrets and keytab
+  template homedir = /home/%U
+  template shell = /bin/bash
+        
+  client signing = yes
+  client use spnego = yes
+
+  ntlm auth = no
+  lanman auth = no
+  client ntlmv2 auth = yes
+
+  idmap config $KERBEROS_DOMAIN:backend = ad
+  idmap config $KERBEROS_DOMAIN:schema_mode = rfc2307
+  idmap config $KERBEROS_DOMAIN:range = 5000-50000
+  idmap config *:backend = tdb
+  idmap config *:range = 2000-4999
+  winbind nss info = rfc2307
+  winbind enum users  = yes
+  winbind enum groups = yes
+  winbind use default domain = yes
+  winbind refresh tickets = Yes
 
   idmap config * : backend = tdb
   idmap idmap config * : range = 20000-99999
   idmap idmap config * : schema_mode = rfc2307
-
-  idmap config $KERBEROS_DOMAIN:backend = ad
-  idmap config $KERBEROS_DOMAIN:schema_mode = rfc2307
-  idmap config $KERBEROS_DOMAIN:range = 100000-499999
-
-  winbind nss info = rfc2307
-  winbind trusted domains only = no
-  winbind use default domain = yes
-  winbind enum users  = yes
-  winbind enum groups = yes
-  winbind refresh tickets = Yes
-
-  template homedir = /home/%U
-  template shell = /bin/bash
-  include = /etc/samba/shares.conf 
 
 EOM
 
