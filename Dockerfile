@@ -87,5 +87,11 @@ ADD nsswitch.conf.member /
 
 ADD net_join.expect /
 
+# https://github.com/jelmer/samba.git
+
+ADD samba-tool-patch/netcmd/* /usr/lib/python2.7/dist-packages/samba/netcmd/
+ADD samba-tool-patch/provision/* /usr/lib/python2.7/dist-packages/samba/provision/
+ADD samba-tool-patch/*.py /usr/lib/python2.7/dist-packages/samba/
+
 ENTRYPOINT ["/init.sh"]
 CMD ["app:help"]
