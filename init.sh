@@ -172,11 +172,13 @@ expect net_join.expect $SAMBA_REALM $KERBEROS_PASSWORD
 
 cp /supervisord.conf.member /etc/supervisor/conf.d/supervisord.conf                                        
 
+
+# set_share_permissions treba sacekati da se supervisord daemoni aktiviraju
+set_share_permissions &
+
 # Start the services                                                                             
+/usr/bin/supervisord
 
-/usr/bin/supervisord || set_share_permissions 
-
-set_share_permissions
 
 }
 

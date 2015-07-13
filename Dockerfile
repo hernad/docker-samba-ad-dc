@@ -42,9 +42,6 @@ RUN chmod 0600 /etc/sssd/sssd.conf
 
 ADD supervisord.conf.ad /
 ADD supervisord.conf.member / 
-# init.sh ce prebaciti u /etc/supervisor/conf.d/supervisord.conf
-ADD init.sh /init.sh
-RUN chmod 755 /init.sh
 
 ADD ntp.conf /etc/ntp.conf
 
@@ -92,6 +89,10 @@ ADD net_join.expect /
 ADD samba-tool-patch/netcmd/* /usr/lib/python2.7/dist-packages/samba/netcmd/
 ADD samba-tool-patch/provision/* /usr/lib/python2.7/dist-packages/samba/provision/
 ADD samba-tool-patch/*.py /usr/lib/python2.7/dist-packages/samba/
+
+# init.sh ce prebaciti u /etc/supervisor/conf.d/supervisord.conf
+ADD init.sh /init.sh
+RUN chmod 755 /init.sh
 
 ENTRYPOINT ["/init.sh"]
 CMD ["app:help"]
