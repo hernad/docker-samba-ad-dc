@@ -74,7 +74,7 @@ shares=$(echo $SAMBA_SHARES | tr "," "\n")
 
 for f in 1 2 3 4 5
 do
-   groups administrator | grep -q domain\ users || (clock $f &&  sleep 10)
+   groups administrator | grep -q domain\ users || (echo clock $f &&  sleep 10)
 done
 
 for share in $shares
@@ -174,7 +174,7 @@ cp /supervisord.conf.member /etc/supervisor/conf.d/supervisord.conf
 
 # Start the services                                                                             
 
-/usr/bin/supervisord 
+/usr/bin/supervisord || set_share_permissions 
 
 set_share_permissions
 
