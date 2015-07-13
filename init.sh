@@ -64,6 +64,29 @@ appHelp () {
 	echo " [command]          - Execute the specified linux command eg. /bin/bash."
 }
 
+
+set_share_permissions() {
+
+
+[ -z $SAMBA_SHARES ] && exit
+
+shares=$(echo $SAMBA_SHARES | tr "," "\n")
+
+for f in 1 2 3 4 5
+do
+   groups administrator | grep -q domain\ users || (clock $f &&  sleep 10)
+done
+
+for share in $shares
+do
+  echo set share permissions $share
+  groups administrator | grep -q domain\ users && \
+     chown "administrator":"domain users" /$share
+done
+
+
+}
+
 appMemberSmb () {
 
 
@@ -151,12 +174,10 @@ cp /supervisord.conf.member /etc/supervisor/conf.d/supervisord.conf
 
 # Start the services                                                                             
 
-/usr/bin/supervisord
+/usr/bin/supervisord 
 
-sleep 5
-id Administrator | grep -q domain || sleep 5 
-id Administrator | grep -q domain || echo --- net ads join ERROR ---- ?! 
-chgrp "domain users" /$SAMBA_SHARE 
+set_share_permissions
+
 }
 
 init() {
