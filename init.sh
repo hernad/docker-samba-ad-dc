@@ -70,6 +70,8 @@ appMemberSmb () {
 sed -i "s/SAMBA_REALM/${KERBEROS_REALM}/" /etc/sssd/sssd.conf                                       
 
 FILE=/etc/samba/smb.conf
+FILE_SHARES=/etc/samba/shares.conf
+
 if [ ! -f /etc/samba/.alreadysetup ]
 then
 
@@ -100,10 +102,10 @@ cat > $FILE <<- EOM
   idmap idmap config * : range = 20000-99999
   idmap idmap config * : schema_mode = rfc2307
 
+  include = $FILE_SHARES
 EOM
 
 
-FILE_SHARES=/etc/samba/shares.conf
 
 if [ ! -z $SAMBA_SHARES ] ; then
 
@@ -144,10 +146,6 @@ cp /nsswitch.conf.member /etc/nsswitch.conf
 [ ! -d /var/lib/samba/private ] && mkdir /var/lib/samba/private
 
 expect net_join.expect $SAMBA_REALM $KERBEROS_PASSWORD
-sleep 5
-id Administrator | grep -q domain || echo --- net ads join ERROR ---- ?! 
-chown "administrator" /$SAMBA_SHARE 
-chgrp "domain users" /$SAMBA_SHARE 
 
 cp /supervisord.conf.member /etc/supervisor/conf.d/supervisord.conf                                        
 
@@ -155,7 +153,10 @@ cp /supervisord.conf.member /etc/supervisor/conf.d/supervisord.conf
 
 /usr/bin/supervisord
 
-
+sleep 5
+id Administrator | grep -q domain || sleep 5 
+id Administrator | grep -q domain || echo --- net ads join ERROR ---- ?! 
+chgrp "domain users" /$SAMBA_SHARE 
 }
 
 init() {
