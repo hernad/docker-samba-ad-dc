@@ -86,9 +86,9 @@ ADD net_join.expect /
 
 # https://github.com/jelmer/samba.git
 
-ADD samba-tool-patch/netcmd/* /usr/lib/python2.7/dist-packages/samba/netcmd/
-ADD samba-tool-patch/provision/* /usr/lib/python2.7/dist-packages/samba/provision/
-ADD samba-tool-patch/*.py /usr/lib/python2.7/dist-packages/samba/
+#ADD samba-tool-patch/netcmd/* /usr/lib/python2.7/dist-packages/samba/netcmd/
+#ADD samba-tool-patch/provision/* /usr/lib/python2.7/dist-packages/samba/provision/
+#ADD samba-tool-patch/*.py /usr/lib/python2.7/dist-packages/samba/
 
 # init.sh ce prebaciti u /etc/supervisor/conf.d/supervisord.conf
 ADD init.sh /init.sh
