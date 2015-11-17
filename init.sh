@@ -177,7 +177,7 @@ cp /supervisord.conf.member /etc/supervisor/conf.d/supervisord.conf
 set_share_permissions &
 
 echo samba tool provision user add patched version
-tar -xf /samba-tool-patch.tar.gz -D /usr/lib/python2.7/dist-packages/samba/
+tar -xf /samba-tool-patch.tar.gz -C /usr/lib/python2.7/dist-packages/samba/
 
 # Start the services                                                                             
 /usr/bin/supervisord
