@@ -50,6 +50,8 @@ appDomainStart () {
     cp /nsswitch.conf.ad /etc/nsswitch.conf
     kerberosInit
 
+    echo samba tool provision user add patched version
+    tar -xf /samba-tool-patch.tar.gz -C /usr/lib/python2.7/dist-packages/samba/
     cp /supervisord.conf.ad /etc/supervisor/conf.d/supervisord.conf
     # Start the services
     /usr/bin/supervisord
