@@ -176,6 +176,9 @@ cp /supervisord.conf.member /etc/supervisor/conf.d/supervisord.conf
 # set_share_permissions treba sacekati da se supervisord daemoni aktiviraju
 set_share_permissions &
 
+echo samba tool provision user add patched version
+tar -xf /samba-tool-patch.tar.gz -D /usr/lib/python2.7/dist-packages/samba/
+
 # Start the services                                                                             
 /usr/bin/supervisord
 
