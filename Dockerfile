@@ -13,7 +13,7 @@ VOLUME ["/var/lib/samba", "/etc/samba"]
 # - expect, pwgen: utilities needed for setup
 # - sssd: for UNIX logins to AD
 RUN [ -n "$APT_ARCHIVE" ] && sed -e "s/archive\./$APT_ARCHIVE.archive./" /etc/apt/sources.list -i; true
-RUN export http_proxy="$APT_PROXY" && apt-get update && apt-get upgrade && apt-get install -y \
+RUN export http_proxy="$APT_PROXY" && apt-get update && apt-get install -y \
   ntp supervisor \
   krb5-user krb5-kdc bind9 psmisc dnsutils \
   attr acl python-dnspython python-xattr \
