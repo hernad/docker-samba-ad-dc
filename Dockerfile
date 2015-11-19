@@ -6,37 +6,36 @@ ENV DEBIAN_FRONTEND noninteractive
 
 VOLUME ["/var/lib/samba", "/etc/samba"]
 
-# Setup ssh and install supervisord
+# Update Ubuntu and install dependencies:
+# - expect, pwgen: utilities needed for setup
+# - sssd: for UNIX logins to AD
 RUN sed -e 's/archive./ba.archive./' /etc/apt/sources.list -i
-RUN apt-get update
-RUN apt-get upgrade -y
+RUN apt-get update && apt-get upgrade && apt-get install -y \
+  ntp supervisor \
+  krb5-user krb5-kdc bind9 psmisc dnsutils \
+  attr acl python-dnspython python-xattr \
+  samba smbclient winbind ldb-tools \
+  expect pwgen \
+  sssd sssd-tools
 
-RUN apt-get install -y ntp supervisor
+# Setup ssh
 #RUN mkdir -p /var/run/sshd
-RUN mkdir -p /var/log/supervisor
 #RUN sed -ri 's/PermitRootLogin without-password/PermitRootLogin Yes/g' /etc/ssh/sshd_config
 
-RUN apt-get install -y krb5-user krb5-kdc bind9 psmisc dnsutils
+RUN mkdir -p /var/log/supervisor
+
 ADD named.conf.options /etc/bind/named.conf.options
-
-RUN apt-get install -y  attr acl python-dnspython python-xattr
-
-RUN apt-get install -y samba smbclient winbind ldb-tools
-
-# Install utilities needed for setup
-RUN apt-get install -y expect pwgen
 
 ADD kdb5_util_create.expect kdb5_util_create.expect
 
-# Install rsyslog to get better logging of ie. bind9
+# Install rsyslog to get better logging of ie. bind9 (NOTE: add to single RUN command above)
 # RUN apt-get install -y rsyslog
 
 # Create run directory for bind9
 RUN mkdir -p /var/run/named
 RUN chown -R bind:bind /var/run/named
 
-# Install sssd for UNIX logins to AD
-RUN apt-get install -y sssd sssd-tools
+# Setup sssd for UNIX logins to AD
 ADD sssd.conf /etc/sssd/sssd.conf
 RUN chmod 0600 /etc/sssd/sssd.conf
 
