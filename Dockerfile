@@ -2,6 +2,9 @@ FROM ubuntu:trusty
 MAINTAINER Ernad Husremovic <hernad@bring.out.ba> 
 # Thank you: Martin Yrj√∂l√<martin.yrjola@gmail.com> & Tobias Kaatz <info@kaatz.io>
 
+ARG APT_ARCHIVE
+ARG APT_PROXY
+
 ENV DEBIAN_FRONTEND noninteractive
 
 VOLUME ["/var/lib/samba", "/etc/samba"]
@@ -9,8 +12,8 @@ VOLUME ["/var/lib/samba", "/etc/samba"]
 # Update Ubuntu and install dependencies:
 # - expect, pwgen: utilities needed for setup
 # - sssd: for UNIX logins to AD
-RUN sed -e 's/archive./ba.archive./' /etc/apt/sources.list -i
-RUN apt-get update && apt-get upgrade && apt-get install -y \
+RUN [ -n "$APT_ARCHIVE" ] && sed -e "s/archive\./$APT_ARCHIVE.archive./" /etc/apt/sources.list -i; true
+RUN export http_proxy="$APT_PROXY" && apt-get update && apt-get upgrade && apt-get install -y \
   ntp supervisor \
   krb5-user krb5-kdc bind9 psmisc dnsutils \
   attr acl python-dnspython python-xattr \
