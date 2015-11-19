@@ -1,8 +1,18 @@
 # Docker container demonstrating Samba's Active Directory Domain Controller (AD DC) support
 
-Run these commands to start the container
+## Build
+
+Build the image with this command:
 ```
 docker build -t samba-ad-dc .
+```
+
+For faster builds, you may override the Ubuntu mirror by adding `--build-arg APT_ARCHIVE=ba`, or point `apt-get` to use a proxy with `--build-arg APT_PROXY=http://squid-deb-proxy.local:8000`
+
+## Run
+
+Run this command to start the container:
+```
 docker run --privileged -v ${PWD}/samba:/var/lib/samba  -e "SAMBA_DOMAIN=samdom" -e "SAMBA_REALM=samdom.example.com" --name dc1 --dns 127.0.0.1 -d samba-ad-dc
 ```
 You can of course change the domain and realm to your liking.
